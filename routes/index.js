@@ -14,10 +14,12 @@ router.get('/', function(req, res) {
   res.render('index', { title: 'Quiz' });
 });
 
-// GET quizes/question a su controller
-router.get('/quizes/question', quizController.question);
-// GET quizes/answer a su controller
-router.get('/quizes/answer',   quizController.answer  );
+// GET /quizes a su controller para listar preguntas
+router.get('/quizes', quizController.index);
+// GET /quizes/:quizId a su controller para mostrar pregunta
+router.get('/quizes/:quizId(\\d+)', quizController.show);
+// GET /quizes/:quizId/answer a su controller para mostrar respuesta
+router.get('/quizes/:quizId(\\d+)/answer',   quizController.answer  );
 
 // GET /author hacia views/author.ejs
 router.get('/author', authorController.author  );

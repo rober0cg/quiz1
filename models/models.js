@@ -2,9 +2,8 @@ var path = require('path');
 
 // Postgres DATABASE_URL = postgres://user:passwd@host:port/database
 // SQLite   DATABASE_URL = sqlite://:@:/
-console.log ( "DATABASE_URL = " + process.env.DATABASE_URL);
-console.log ( "DATABASE_STORAGE = " + process.env.DATABASE_STORAGE);
-
+//console.log ( "DATABASE_URL = " + process.env.DATABASE_URL);
+//console.log ( "DATABASE_STORAGE = " + process.env.DATABASE_STORAGE);
 var url = process.env.DATABASE_URL.match(/(.*)\:\/\/(.*?)\:(.*)@(.*)\:(.*)\/(.*)/);
 var protocol = (url[1]||null);
 var dialect  = protocol;
@@ -43,8 +42,12 @@ sequelize.sync().success(function(){
   Quiz.count().success(function(count){
     if(count===0){ // tabla vacía, recién creada
       Quiz.create({ pregunta: 'Capital de Italia?',
-                    respuesta: 'Roma'
-                  }).success(function(){
+                    respuesta: 'Roma' });
+      Quiz.create({ pregunta: 'Capital de España?',
+                    respuesta: 'Madrid' });
+      Quiz.create({ pregunta: 'Capital de Portugal?',
+                    respuesta: 'Lisboa'
+                  }).then(function(){
                     console.log('BBDD creada e inicializada')
                   });
     }
