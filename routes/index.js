@@ -14,6 +14,9 @@ router.get('/', function(req, res) {
   res.render('index', { title: 'Quiz' });
 });
 
+// Autoload de comandos con :quizId
+router.param('quizId', quizController.load);
+
 // GET /quizes a su controller para listar preguntas
 router.get('/quizes', quizController.index);
 // GET /quizes/:quizId a su controller para mostrar pregunta
