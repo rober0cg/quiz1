@@ -1,4 +1,10 @@
 <table>
+  <tr><td>
+  <form method="GET" action="/quizes">
+    <input type="text" name="search" value="Buscar"/>
+    <input type="submit" value="Filtrar" />
+  </form>
+  </tr></td>
   <% var i; for(i=0; i<quizes.length; i++) { %>
     <tr><td>
       <a href="/quizes/<%= quizes[i].id %>">

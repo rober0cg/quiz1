@@ -14,11 +14,25 @@ exports.load = function(req, res, next, quizId) {
 };
 
 // GET /quizes para mostrar lisa de preguntas
+// GET /quizes?search=patron para lista ordenada de coincidencias
 exports.index = function(req, res) {
-  models.Quiz.findAll().then(function(quizes) {
+  var query ;
+// en función de la existencia del parámetro preparamos query
+  if (req.query.search) {
+    query = {
+      where: ["pregunta like ?", '%' + req.query.search.replace(/ /g,'%') + '%'],
+      order: ["pregunta"]
+    };
+  }
+  else {
+    query = {} ;
+  }
+//  console.log('query = ' + JSON.stringify(query));
+  models.Quiz.findAll(query).then(function(quizes) {
     res.render('quizes/index.ejs', {quizes: quizes});
   });
 };
+
 // GET /quizes/:quizId para mostrar pregunta
 exports.show = function( req, res) {
   res.render('quizes/show', {quiz: req.quiz});
