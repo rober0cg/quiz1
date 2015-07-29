@@ -23,6 +23,11 @@ router.get('/quizes', quizController.index);
 router.get('/quizes/:quizId(\\d+)', quizController.show);
 // GET /quizes/:quizId/answer a su controller para mostrar respuesta
 router.get('/quizes/:quizId(\\d+)/answer',   quizController.answer  );
+// GET /quizes/new para el formulario de creación de nuevas preguntas
+router.get('/quizes/new', quizController.new);
+// POST /quizes/create para realizar la acción de crear nueva pregunta
+router.post('/quizes/create', quizController.create);
+
 
 // GET /author hacia views/author.ejs
 router.get('/author', authorController.author  );
