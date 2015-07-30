@@ -31,7 +31,8 @@ router.post('/quizes/create', quizController.create);
 router.get('/quizes/:quizId(\\d+)/edit', quizController.edit);
 // PUT /quizes/:quizId pare modificar una pregunta ya editada
 router.put('/quizes/:quizId(\\d+)', quizController.update);
-
+// DELETE /quizes/:quizID(\\d+) para ejecutar el borrado de una pregunta
+router.delete('/quizes/:quizId(\\d+)', quizController.destroy);
 
 // GET /author hacia views/author.ejs
 router.get('/author', authorController.author  );

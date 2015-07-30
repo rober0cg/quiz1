@@ -102,6 +102,15 @@ exports.update = function(req, res) {
   }
 };
 
+// DELETE /quizes/:quizId para el realizar el borrado en DB de la pregunta
+exports.destroy = function(req, res) {
+  var quiz = req.quiz; // recuperada en load
+  console.log("req.body=" + JSON.stringify(req.body));
+  // realizamos el borrado en la tabla de DB
+  quiz.destroy().then(function(){
+    res.redirect('/quizes');
+  });
+};
 
 // utilidad para convertir la estructura que devuelve validate()
 // en el array errors que espera layout

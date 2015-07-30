@@ -1,11 +1,13 @@
 <table>
   <tr>
-    <td colspan=2>
-      <form method="GET" action="/quizes">
+    <form method="GET" action="/quizes">
+      <td>
         <input type="text" name="search" value="Buscar"/>
+      </td>
+      <td colspan=2>
         <input type="submit" value="Filtrar" />
-      </form>
-    </td>
+      </td>
+    </form>
   </tr>
   <% for(var i=0; i<quizes.length; i++) { %>
   <tr>
@@ -19,10 +21,15 @@
         <button>Editar</button>
       </a>
     </td>
+    <td>
+      <form method="POST" action="/quizes/<%= quizes[i].id %>?_method=DELETE">
+        <button type="submit" onClick="return confirm('Borrar: <%= quizes[i].pregunta %>')">Borrar</button>
+      </form>
+    </td>
   </tr>
   <% } %>
   <tr>
-    <td colspan=2>
+    <td>
       <a href="/quizes/new"><button type="button">Crear pregunta</button></a>
     </td>
   </tr>
