@@ -34,16 +34,18 @@ exports.index = function(req, res) {
 };
 
 // GET /quizes/:quizId para mostrar pregunta
-exports.show = function( req, res) {
-  res.render('quizes/show', {quiz: req.quiz, errors: []});
+exports.show = function(req, res) {
+  var quiz = req.quiz; // recuperada en load
+  res.render('quizes/show', {quiz: quiz, errors: []});
 };
 
 // GET /quizes/:quizId/answer para analizar la respuesta
 // y devolver el resultado
 exports.answer = function(req, res) {
 //  console.log("quiz_controller.answer quiz.id = " + req.quiz.id ) ;
-  var resultado = (req.query.respuesta === req.quiz.respuesta) ? 'Correcto' : 'Incorrecto' ;
-  res.render('quizes/answer', {quiz: req.quiz, respuesta: resultado, errors: []});
+  var quiz = req.quiz; // recuperada en load
+  var resultado = (req.query.respuesta === quiz.respuesta) ? 'Correcto' : 'Incorrecto' ;
+  res.render('quizes/answer', {quiz: quiz, respuesta: resultado, errors: []});
 };
 
 // GET /quizes/new para el formulario de alta de nueva pregunta
@@ -60,11 +62,9 @@ exports.new = function(req,res) {
 exports.create = function(req,res) {
   // creamo objeto quiz no persistente recuperando el del formulario de alta
   var quiz = models.Quiz.build(req.body.quiz) ;
-  console.log("req.body.quiz=" + JSON.stringify(req.body));
-
+//  console.log("req.body=" + JSON.stringify(req.body));
   var qverrs = quiz.validate();
-  if(qverrs) {
-    // si hay errores volvemos a /quizes/new con los mensajes
+  if (qverrs) {// si error, volvemos a /quizes/new con los mensajes
     res.render('quizes/new',
       {quiz: quiz, errors: utilValidateToErrors(qverrs)});
   }
@@ -75,6 +75,33 @@ exports.create = function(req,res) {
     });
   }
 };
+
+// GET /quizes/:quizId/edit para el formulario de editar preguntas
+exports.edit = function(req, res) {
+  var quiz = req.quiz; // recuperada en load
+  res.render('quizes/edit', {quiz: quiz, errors: []});
+};
+
+// PUT /quizes/:quizId para la modificación en DB de la pregunta
+// y redirigir a la lista de preguntas
+exports.update = function(req, res) {
+  var quiz = req.quiz; // recuperada en load
+  quiz.pregunta = req.body.quiz.pregunta;
+  quiz.respuesta = req.body.quiz.respuesta;
+//  console.log("req.body=" + JSON.stringify(req.body));
+  var qverrs = quiz.validate();
+  if (qverrs) {// si error, volvemos a /quizes/edit con los mensajes
+    res.render('quizes/edit',
+      {quiz: quiz, errors: utilValidateToErrors(qverrs)});
+  }
+  else {
+    // guardar en DB los datos recogidos del formulario en quiz
+    quiz.save({fields: ["pregunta", "respuesta"]}).then(function(){
+      res.redirect('/quizes');
+    });
+  }
+};
+
 
 // utilidad para convertir la estructura que devuelve validate()
 // en el array errors que espera layout

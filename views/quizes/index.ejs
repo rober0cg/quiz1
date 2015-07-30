@@ -1,18 +1,29 @@
 <table>
-  <tr><td>
-  <form method="GET" action="/quizes">
-    <input type="text" name="search" value="Buscar"/>
-    <input type="submit" value="Filtrar" />
-  </form>
-  </tr></td>
-  <% var i; for(i=0; i<quizes.length; i++) { %>
-    <tr><td>
+  <tr>
+    <td colspan=2>
+      <form method="GET" action="/quizes">
+        <input type="text" name="search" value="Buscar"/>
+        <input type="submit" value="Filtrar" />
+      </form>
+    </td>
+  </tr>
+  <% for(var i=0; i<quizes.length; i++) { %>
+  <tr>
+    <td>
       <a href="/quizes/<%= quizes[i].id %>">
         <%= quizes[i].pregunta %>
       </a>
-    </tr></td>
+    </td>
+    <td>
+      <a href="/quizes/<%= quizes[i].id %>/edit">
+        <button>Editar</button>
+      </a>
+    </td>
+  </tr>
   <% } %>
-<tr><td>
-  <a href="/quizes/new"><button type="button">Crear pregunta</button></a>
-</tr></td>
+  <tr>
+    <td colspan=2>
+      <a href="/quizes/new"><button type="button">Crear pregunta</button></a>
+    </td>
+  </tr>
 </table>
