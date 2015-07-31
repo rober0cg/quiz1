@@ -17,12 +17,24 @@ exports.load = function(req, res, next, quizId) {
 // GET /quizes?search=patron para lista ordenada de coincidencias
 exports.index = function(req, res) {
   var query ;
+  var _search = req.query.search ;
+  var _tema = req.query.tema ;
+  if (_search==='Buscar') { _search = ''; }
 // en función de la existencia del parámetro preparamos query
-  if (req.query.search) {
-    query = {
-      where: ["pregunta like ?", '%' + req.query.search.replace(/ /g,'%') + '%'],
-      order: ["pregunta"]
-    };
+  if (_search || _tema) {
+    if (_tema==='void') { // buscamos sólo por search
+      query = {
+        where: ["pregunta like ?", '%' + _search.replace(/ /g,'%') + '%'],
+        order: ["pregunta"]
+      };
+    }
+    else { // buscamos por _search y por _tema
+      query = {
+        where: ["pregunta like ? and tema=?", '%' + _search.replace(/ /g,'%') + '%', _tema],
+        order: ["pregunta"]
+      };
+
+    }
   }
   else {
     query = {} ;
@@ -52,7 +64,7 @@ exports.answer = function(req, res) {
 exports.new = function(req,res) {
   // creamos objeto quiz no persistente para pasarlo al formulario de alta
   var quiz = models.Quiz.build(
-    { pregunta: "Pregunta", respuesta: "Respuesta"}
+    { pregunta: "Pregunta", respuesta: "Respuesta", tema: "Otro"}
   );
   res.render('quizes/new', {quiz: quiz, errors: []});
 };
@@ -70,7 +82,7 @@ exports.create = function(req,res) {
   }
   else {
     // guardar en DB los datos recogidos del formulario en quiz
-    quiz.save({fields: ["pregunta", "respuesta"]}).then(function(){
+    quiz.save({fields: ["pregunta", "respuesta","tema"]}).then(function(){
       res.redirect('/quizes');
     });
   }
@@ -88,6 +100,7 @@ exports.update = function(req, res) {
   var quiz = req.quiz; // recuperada en load
   quiz.pregunta = req.body.quiz.pregunta;
   quiz.respuesta = req.body.quiz.respuesta;
+  quiz.tema = req.body.quiz.tema;
 //  console.log("req.body=" + JSON.stringify(req.body));
   var qverrs = quiz.validate();
   if (qverrs) {// si error, volvemos a /quizes/edit con los mensajes
@@ -96,7 +109,7 @@ exports.update = function(req, res) {
   }
   else {
     // guardar en DB los datos recogidos del formulario en quiz
-    quiz.save({fields: ["pregunta", "respuesta"]}).then(function(){
+    quiz.save({fields: ["pregunta", "respuesta","tema"]}).then(function(){
       res.redirect('/quizes');
     });
   }

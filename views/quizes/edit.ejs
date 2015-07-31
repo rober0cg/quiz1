@@ -1,4 +1,8 @@
-Editar pregunta: <p>
+<table>
+  <tr>
+    <td colspan=2> Editar pregunta: </td>
+  </tr>
 <form method="POST" action="/quizes/<%= quiz.id %>?_method=PUT">
   <% include _form.ejs %>
 </form>
+</table>

@@ -15,6 +15,13 @@ module.exports = function(sequelize, DataTypes) {
           notEmpty: { msg: "-> Falta Respuesta"},
           not: { args: /Respuesta/i, msg: "-> No válido"}
         }
+      },
+      tema:{
+        type: DataTypes.STRING,
+        validate: {
+          notEmpty: { msg: "-> Falta Tema"},
+          isIn: { args: [['otro','humanidades','ocio','ciencia','tecnologia']], msg: "-> No válido"}
+        }
       }
     }
   );
