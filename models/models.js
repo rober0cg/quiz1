@@ -42,14 +42,16 @@ sequelize.sync().success(function(){
   Quiz.count().success(function(count){
     if(count===0){ // tabla vacía, recién creada
       Quiz.create({ pregunta: 'Capital de Italia?',
-                    respuesta: 'Roma' });
+                    respuesta: 'Roma',
+                    tema: 'humanidades' });
       Quiz.create({ pregunta: 'Capital de España?',
-                    respuesta: 'Madrid' });
+                    respuesta: 'Madrid',
+                    tema: 'humanidades' });
       Quiz.create({ pregunta: 'Capital de Portugal?',
-                    respuesta: 'Lisboa'
-                  }).then(function(){
-                    console.log('BBDD creada e inicializada')
-                  });
+                    respuesta: 'Lisboa',
+                    tema: 'humanidades' }).then(function(){
+                      console.log('BBDD creada e inicializada')
+                    });
     }
     else {
       console.log('BBDD abierta e inicializada');
