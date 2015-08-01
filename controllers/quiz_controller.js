@@ -1,9 +1,15 @@
-// controller para los quiz question y anbswer
+// controller para los operaciones sobre los quiz
 var models = require('../models/models.js');
+
+// incorporamos utilidades comunes a varios controllers
+var utils = require('./_utils.js');
 
 // Autoload - factoriza código cuando la ruta incluye :quizId
 exports.load = function(req, res, next, quizId) {
-  models.Quiz.find(quizId).then(function(quiz) {
+  models.Quiz.find({
+    where: { id: Number(quizId) },
+    include: [{ model: models.Comment }] // para leer también los comentarios
+  }).then(function(quiz) {
     if (quiz) {
       req.quiz = quiz;
       next();
@@ -48,6 +54,7 @@ exports.index = function(req, res) {
 // GET /quizes/:quizId para mostrar pregunta
 exports.show = function(req, res) {
   var quiz = req.quiz; // recuperada en load
+  console.log('quiz:' + JSON.stringify(quiz));
   res.render('quizes/show', {quiz: quiz, errors: []});
 };
 
@@ -78,7 +85,7 @@ exports.create = function(req,res) {
   var qverrs = quiz.validate();
   if (qverrs) {// si error, volvemos a /quizes/new con los mensajes
     res.render('quizes/new',
-      {quiz: quiz, errors: utilValidateToErrors(qverrs)});
+      {quiz: quiz, errors: utils.ValidateToErrors(qverrs)});
   }
   else {
     // guardar en DB los datos recogidos del formulario en quiz
@@ -105,7 +112,7 @@ exports.update = function(req, res) {
   var qverrs = quiz.validate();
   if (qverrs) {// si error, volvemos a /quizes/edit con los mensajes
     res.render('quizes/edit',
-      {quiz: quiz, errors: utilValidateToErrors(qverrs)});
+      {quiz: quiz, errors: utils.ValidateToErrors(qverrs)});
   }
   else {
     // guardar en DB los datos recogidos del formulario en quiz
@@ -124,21 +131,3 @@ exports.destroy = function(req, res) {
     res.redirect('/quizes');
   });
 };
-
-// utilidad para convertir la estructura que devuelve validate()
-// en el array errors que espera layout
-// validate() -> { f1: [ f1e1, f1e2, ...], f2: [f2e1, f2e2, ...], ... }
-function utilValidateToErrors(verr) {
-  var i=0 ;
-  var Errors = new Array();
-  // recorremos los distintos campos en la estructura
-  for ( var fld in verr ) {
-    console.log("fld=" + fld);
-    // y para cada campo, su array de mensajes
-    for ( var err=0; err<verr[fld].length; err++) {
-      console.log("\terr=" + verr[fld][err]);
-      Errors[i++] = { message: verr[fld][err] };
-    }
-  }
-  return Errors;
-}

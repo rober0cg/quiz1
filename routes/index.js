@@ -2,12 +2,16 @@ var express = require('express');
 var router = express.Router();
 
 // Importamos el controller para las quizes
-// Contendrá los rutas a question y answer
-var quizController = require ('../controllers/quiz_controller');
+// Contendrá los rutas a las operaciones sobre los quiz
+var quizController = require('../controllers/quiz_controller');
+
+// Importamos el controller para los comments
+// Contiene las rutas a las operaciones sobre éstos
+var commentController = require('../controllers/comment_controller');
 
 // Importamos el controller para los créditos
 // Contendrá la ruta a los créditos
-var authorController = require ('../controllers/author_controller');
+var authorController = require('../controllers/author_controller');
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -33,6 +37,11 @@ router.get('/quizes/:quizId(\\d+)/edit', quizController.edit);
 router.put('/quizes/:quizId(\\d+)', quizController.update);
 // DELETE /quizes/:quizID(\\d+) para ejecutar el borrado de una pregunta
 router.delete('/quizes/:quizId(\\d+)', quizController.destroy);
+
+// GET /quizes/:quizId(\\d+)/comments/new para el formulario de alta
+router.get('/quizes/:quizId(\\d+)/comments/new', commentController.new);
+// POST /quizes/:quizId(\\d+)/comments para ejecuar el alta del comentario
+router.post('/quizes/:quizId(\\d+)/comments', commentController.create);
 
 // GET /author hacia views/author.ejs
 router.get('/author', authorController.author  );
