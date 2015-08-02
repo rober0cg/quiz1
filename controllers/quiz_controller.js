@@ -39,7 +39,6 @@ exports.index = function(req, res) {
         where: ["pregunta like ? and tema=?", '%' + _search.replace(/ /g,'%') + '%', _tema],
         order: ["pregunta"]
       };
-
     }
   }
   else {
@@ -47,14 +46,14 @@ exports.index = function(req, res) {
   }
 //  console.log('query = ' + JSON.stringify(query));
   models.Quiz.findAll(query).then(function(quizes) {
-    res.render('quizes/index.ejs', {quizes: quizes, errors: []});
+    res.render('quizes/index', {quizes: quizes, errors: []});
   }).catch(function(error){new Error(error);});
 };
 
 // GET /quizes/:quizId para mostrar pregunta
 exports.show = function(req, res) {
   var quiz = req.quiz; // recuperada en load
-  console.log('quiz:' + JSON.stringify(quiz));
+//  console.log('quiz:' + JSON.stringify(quiz));
   res.render('quizes/show', {quiz: quiz, errors: []});
 };
 
@@ -125,7 +124,7 @@ exports.update = function(req, res) {
 // DELETE /quizes/:quizId para el realizar el borrado en DB de la pregunta
 exports.destroy = function(req, res) {
   var quiz = req.quiz; // recuperada en load
-  console.log("req.body=" + JSON.stringify(req.body));
+//  console.log("req.body=" + JSON.stringify(req.body));
   // realizamos el borrado en la tabla de DB
   quiz.destroy().then(function(){
     res.redirect('/quizes');

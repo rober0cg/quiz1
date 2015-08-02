@@ -14,8 +14,13 @@ var commentCtlr = require('../controllers/comment_controller');
 var sessionCtlr = require('../controllers/session_controller');
 
 // Importamos el controller para los créditos
-// Contendrá la ruta a los créditos
+// Contendrá la ruta a la vista sin más
 var authorCtlr = require('../controllers/author_controller');
+
+// Importamos el controller para las estadísticas
+// Contendrá la ruta a la consulta
+var statsCtlr = require('../controllers/stats_controller');
+
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -53,6 +58,7 @@ router.put('/quizes/:quizId(\\d+)', sessionCtlr.loginRequired, quizCtlr.update);
 // DELETE /quizes/:quizID(\\d+) para ejecutar el borrado de una pregunta
 router.delete('/quizes/:quizId(\\d+)', sessionCtlr.loginRequired, quizCtlr.destroy);
 
+
 // Rutas Comentarios
 // GET /quizes/:quizId(\\d+)/comments/new para el formulario de alta
 router.get('/quizes/:quizId(\\d+)/comments/new', commentCtlr.new);
@@ -64,5 +70,12 @@ router.get('/quizes/:quizId(\\d+)/comments/:commentId(\\d+)/publish',
 
 // GET /author hacia views/author.ejs
 router.get('/author', authorCtlr.author);
+
+
+// GET /quizes/statistics para consultar estadísticas de DB y mostrarlas
+router.get('/quizes/statistics', statsCtlr.show);
+
+
+
 
 module.exports = router;
