@@ -40,6 +40,25 @@ app.use(function(req, res, next){
   next();
 });
 
+// Helper para el control de inactividad tras logarse
+app.use(function(req, res, next){
+  var ahora = new Date(); // la hora del acceso actual
+  req.session.lastAccess = new Date( req.session.lastAccess || ahora );
+// control tiempo inactividad sólo si logado
+  if (req.session.user) {
+    var lapso = ahora.getTime() - req.session.lastAccess.getTime() ;
+    if ( lapso > 120000 ) { // diffs de getTime en milisegundos
+      console.log('auto-logout 120secs => LOGOUT');
+      delete req.session.user; // para realizar la desconexión
+// si se quiere forzar volver a logarse
+// lo comento porque las acciones protegidas ya tienen loginRequired
+//      res.redirect('/login');
+    }
+  }
+  req.session.lastAccess = ahora;
+  next();
+});
+
 app.use('/', routes);
 
 // catch 404 and forward to error handler
