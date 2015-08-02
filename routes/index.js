@@ -35,21 +35,22 @@ router.get('/logout', sessionController.destroy);
 
 // Rutas Quizes
 // GET /quizes a su controller para listar preguntas
+// Incorporamos loginRequired en las rutas crear, editar y borrar preguntas
 router.get('/quizes', quizController.index);
 // GET /quizes/:quizId a su controller para mostrar pregunta
 router.get('/quizes/:quizId(\\d+)', quizController.show);
 // GET /quizes/:quizId/answer a su controller para mostrar respuesta
 router.get('/quizes/:quizId(\\d+)/answer', quizController.answer  );
 // GET /quizes/new para el formulario de creación de nuevas preguntas
-router.get('/quizes/new', quizController.new);
+router.get('/quizes/new', sessionController.loginRequired, quizController.new);
 // POST /quizes/create para realizar la acción de crear nueva pregunta
-router.post('/quizes/create', quizController.create);
+router.post('/quizes/create', sessionController.loginRequired, quizController.create);
 // GET /quizes/:quizId/edit pare el formulario de edicioón de una pregunta
-router.get('/quizes/:quizId(\\d+)/edit', quizController.edit);
+router.get('/quizes/:quizId(\\d+)/edit', sessionController.loginRequired, quizController.edit);
 // PUT /quizes/:quizId pare modificar una pregunta ya editada
-router.put('/quizes/:quizId(\\d+)', quizController.update);
+router.put('/quizes/:quizId(\\d+)', sessionController.loginRequired, quizController.update);
 // DELETE /quizes/:quizID(\\d+) para ejecutar el borrado de una pregunta
-router.delete('/quizes/:quizId(\\d+)', quizController.destroy);
+router.delete('/quizes/:quizId(\\d+)', sessionController.loginRequired, quizController.destroy);
 
 // Rutas Comentarios
 // GET /quizes/:quizId(\\d+)/comments/new para el formulario de alta
