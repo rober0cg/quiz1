@@ -4,7 +4,7 @@ var models = require('../models/models.js');
 // incorporamos utilidades comunes a varios controllers
 var utils = require('./_utils.js');
 
-// Autoload - factoriza código cuando la ruta incluye :quizId
+// Autoload - factoriza código cuando la ruta incluye param :quizId
 exports.load = function(req, res, next, quizId) {
   models.Quiz.find({
     where: { id: Number(quizId) },
