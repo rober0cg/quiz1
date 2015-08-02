@@ -9,6 +9,10 @@ var quizController = require('../controllers/quiz_controller');
 // Contiene las rutas a las operaciones sobre éstos
 var commentController = require('../controllers/comment_controller');
 
+// Importamos el controller para la gestión de la sesión
+// Contiene las rutas a estas operacines
+var sessionController = require('../controllers/session_controller');
+
 // Importamos el controller para los créditos
 // Contendrá la ruta a los créditos
 var authorController = require('../controllers/author_controller');
@@ -21,6 +25,15 @@ router.get('/', function(req, res) {
 // Autoload de comandos con :quizId
 router.param('quizId', quizController.load);
 
+//Rutas de Sesión
+// GET /login
+router.get('/login', sessionController.new);
+// POST /login
+router.post('/login', sessionController.create);
+// GET /logout (aunque debía der DELETE /login)
+router.get('/logout', sessionController.destroy);
+
+// Rutas Quizes
 // GET /quizes a su controller para listar preguntas
 router.get('/quizes', quizController.index);
 // GET /quizes/:quizId a su controller para mostrar pregunta
@@ -38,6 +51,7 @@ router.put('/quizes/:quizId(\\d+)', quizController.update);
 // DELETE /quizes/:quizID(\\d+) para ejecutar el borrado de una pregunta
 router.delete('/quizes/:quizId(\\d+)', quizController.destroy);
 
+// Rutas Comentarios
 // GET /quizes/:quizId(\\d+)/comments/new para el formulario de alta
 router.get('/quizes/:quizId(\\d+)/comments/new', commentController.new);
 // POST /quizes/:quizId(\\d+)/comments para ejecuar el alta del comentario
