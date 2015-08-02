@@ -6,7 +6,7 @@ var utils = require('./_utils.js');
 
 // Autoload - factoriza código cuando la ruta incluye param :commentId
 exports.load = function(req, res, next, commentId) {
-  console.log('comment.load commentId='+commentId);
+//  console.log('comment.load commentId='+commentId);
   models.Comment.find({
     where: { id: Number(commentId)}
   }).then(function(comment){
@@ -30,12 +30,12 @@ exports.new = function(req, res) {
 // POST /quizes/:quizId(\\d+)/comments
 // realiza la creación del comentario en DB y redirige a la pregunta
 exports.create = function(req, res) {
-  console.log('req.body='+JSON.stringify(req.body));
+//  console.log('req.body='+JSON.stringify(req.body));
   var quizId = req.params.quizId ;
   var comment = models.Comment.build(
     { texto: req.body.comment.texto, QuizId: quizId }
   );
-  console.log('quizId=' + quizId + ', comment='+ JSON.stringify(req.body));
+//  console.log('quizId=' + quizId + ', comment='+ JSON.stringify(req.body));
   var cverr = comment.validate();
   if (cverr) {
     res.render('comments/new',
@@ -51,7 +51,7 @@ exports.create = function(req, res) {
 
 // GET /quizes/:quizId/comments/:commentId/publish
 exports.publish = function(req, res) {
-  console.log('comment.publis req.comment='+JSON.stringify(req.comment));
+//  console.log('comment.publis req.comment='+JSON.stringify(req.comment));
   req.comment.publicado = true;
   req.comment.save({fields: ["publicado"]})
     .then(function() { res.redirect('/quizes/'+req.params.quizId);})
